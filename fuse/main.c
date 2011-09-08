@@ -91,6 +91,9 @@ static int fuse_exfat_readdir(const char* path, void* buffer,
 	struct exfat_iterator it;
 	int rc;
 	char name[EXFAT_NAME_MAX + 1];
+       struct stat st;
+
+	st.st_mode = S_IFDIR; 
 
 	exfat_debug("[fuse_exfat_readdir] %s", path);
 
@@ -104,8 +107,8 @@ static int fuse_exfat_readdir(const char* path, void* buffer,
 		return -ENOTDIR;
 	}
 
-	filler(buffer, ".", NULL, 0);
-	filler(buffer, "..", NULL, 0);
+	filler(buffer, ".", &st, 0);
+	filler(buffer, "..", &st, 0);
 
 	rc = exfat_opendir(&ef, parent, &it);
 	if (rc != 0)
@@ -120,7 +123,15 @@ static int fuse_exfat_readdir(const char* path, void* buffer,
 		exfat_debug("[fuse_exfat_readdir] %s: %s, %"PRIu64" bytes, cluster %u",
 				name, IS_CONTIGUOUS(*node) ? "contiguous" : "fragmented",
 				(uint64_t) node->size, node->start_cluster);
-		filler(buffer, name, NULL, 0);
+              if (node->flags & EXFAT_ATTRIB_DIR)
+              {
+                    st.st_mode = S_IFDIR; 
+              }
+              else
+              {
+                    st.st_mode = S_IFREG; 
+              }
+		filler(buffer, name, &st, 0);
 		exfat_put_node(&ef, node);
 	}
 	exfat_closedir(&ef, &it);
