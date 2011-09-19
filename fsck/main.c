@@ -23,6 +23,7 @@
 #include <exfat.h>
 #include <exfatfs.h>
 #include <inttypes.h>
+#include <errno.h>
 
 #define exfat_debug(format, ...)
 
@@ -125,7 +126,8 @@ int main(int argc, char* argv[])
 	char** pp;
 	const char* spec = NULL;
 	struct exfat ef;
-
+  int rc;
+  
 	printf("exfatfsck %u.%u.%u\n",
 			EXFAT_VERSION_MAJOR, EXFAT_VERSION_MINOR, EXFAT_VERSION_PATCH);
 
@@ -144,9 +146,13 @@ int main(int argc, char* argv[])
 	if (spec == NULL)
 		usage(argv[0]);
 
-	if (exfat_mount(&ef, spec, "ro") != 0)
-		return 1;
-
+	rc = exfat_mount(&ef, spec, "ro");
+	if ( rc!= 0){
+		if(rc==-ENODATA)
+			return 2;
+		else
+			return 1;
+  }
 	printf("Checking file system on %s.\n", spec);
 	fsck(&ef);
 	exfat_unmount(&ef);

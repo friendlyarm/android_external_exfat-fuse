@@ -250,14 +250,14 @@ static int readdir(struct exfat* ef, const struct exfat_node* parent,
 				exfat_error("real size does not equal to size "
 						"(%"PRIu64" != %"PRIu64")",
 						le64_to_cpu(meta2->real_size), (*node)->size);
-				goto error;
+				//goto error;
 			}
 			/* empty files must be marked as non-contiguous */
 			if ((*node)->size == 0 && (meta2->flags & EXFAT_FLAG_CONTIGUOUS))
 			{
 				exfat_error("empty file marked as contiguous (0x%hhx)",
 						meta2->flags);
-				goto error;
+				//goto error;
 			}
 			/* directories must be aligned on at cluster boundary */
 			if (((*node)->flags & EXFAT_ATTRIB_DIR) &&

@@ -137,7 +137,7 @@ int exfat_mount(struct exfat* ef, const char* spec, const char* options)
 	if (ef->fd < 0)
 	{
 		free(ef->sb);
-		return -EIO;
+		return -ENODATA;
 	}
 
 	exfat_read_raw(ef->sb, sizeof(struct exfat_super_block), 0, ef->fd);
@@ -146,7 +146,7 @@ int exfat_mount(struct exfat* ef, const char* spec, const char* options)
 		close(ef->fd);
 		free(ef->sb);
 		exfat_error("exFAT file system is not found");
-		return -EIO;
+		return -ENODATA;
 	}
 	if (ef->sb->version.major != 1 || ef->sb->version.minor != 0)
 	{
@@ -154,14 +154,14 @@ int exfat_mount(struct exfat* ef, const char* spec, const char* options)
 		exfat_error("unsupported exFAT version: %hhu.%hhu",
 				ef->sb->version.major, ef->sb->version.minor);
 		free(ef->sb);
-		return -EIO;
+		return -ENODATA;
 	}
 	if (ef->sb->fat_count != 1)
 	{
 		close(ef->fd);
 		free(ef->sb);
 		exfat_error("unsupported FAT count: %hhu", ef->sb->fat_count);
-		return -EIO;
+		return -ENODATA;
 	}
 	/* officially exFAT supports cluster size up to 32 MB */
 	if ((int) ef->sb->sector_bits + (int) ef->sb->spc_bits > 25)
@@ -170,7 +170,7 @@ int exfat_mount(struct exfat* ef, const char* spec, const char* options)
 		free(ef->sb);
 		exfat_error("too big cluster size: 2^%d",
 				(int) ef->sb->sector_bits + (int) ef->sb->spc_bits);
-		return -EIO;
+		return -ENODATA;
 	}
 
 	ef->zero_sector = malloc(SECTOR_SIZE(*ef->sb));
@@ -187,7 +187,7 @@ int exfat_mount(struct exfat* ef, const char* spec, const char* options)
 		free(ef->zero_sector);
 		close(ef->fd);
 		free(ef->sb);
-		return -EIO;
+		return -ENODATA;
 	}
 	memset(ef->zero_sector, 0, SECTOR_SIZE(*ef->sb));
 
