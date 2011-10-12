@@ -110,6 +110,7 @@ struct exfat_human_bytes
 
 extern int exfat_errors;
 
+/*
 void exfat_bug(const char* format, ...)
 	__attribute__((format(printf, 1, 2), noreturn));
 void exfat_error(const char* format, ...)
@@ -118,6 +119,11 @@ void exfat_warn(const char* format, ...)
 	__attribute__((format(printf, 1, 2)));
 void exfat_debug(const char* format, ...)
 	__attribute__((format(printf, 1, 2)));
+*/
+#define exfat_debug(x...)
+#define exfat_bug(x...)
+#define exfat_warn(x...)
+#define exfat_error(x...)    exfat_errors++
 
 int exfat_open(const char* spec, int ro);
 void exfat_read_raw(void* buffer, size_t size, off_t offset, int fd);

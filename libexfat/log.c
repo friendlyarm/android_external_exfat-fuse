@@ -18,7 +18,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "exfat.h"
+//#include "exfat.h"
 #include <stdarg.h>
 #include <syslog.h>
 

@@ -35,8 +35,10 @@ static off_t s2o(const struct exfat* ef, off_t sector)
  */
 static off_t c2s(const struct exfat* ef, cluster_t cluster)
 {
-	if (cluster < EXFAT_FIRST_DATA_CLUSTER)
+	if (cluster < EXFAT_FIRST_DATA_CLUSTER){
 		exfat_bug("invalid cluster number %u", cluster);
+              return 0;
+       }
 	return le32_to_cpu(ef->sb->cluster_sector_start) +
 		((off_t) (cluster - EXFAT_FIRST_DATA_CLUSTER) << ef->sb->spc_bits);
 }
