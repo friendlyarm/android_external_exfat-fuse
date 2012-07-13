@@ -26,14 +26,14 @@
 #include "uct.h"
 #include "rootdir.h"
 
-off_t fat_alignment(void)
+off64_t fat_alignment(void)
 {
-	return (off_t) le32_to_cpu(sb.fat_sector_start) * SECTOR_SIZE(sb);
+	return (off64_t) le32_to_cpu(sb.fat_sector_start) * SECTOR_SIZE(sb);
 }
 
-off_t fat_size(void)
+off64_t fat_size(void)
 {
-	return (off_t) le32_to_cpu(sb.fat_sector_count) * SECTOR_SIZE(sb);
+	return (off64_t) le32_to_cpu(sb.fat_sector_count) * SECTOR_SIZE(sb);
 }
 
 static cluster_t fat_write_entry(cluster_t cluster, cluster_t value, int fd)
@@ -57,7 +57,7 @@ static cluster_t fat_write_entries(cluster_t cluster, uint64_t length, int fd)
 	return fat_write_entry(cluster, EXFAT_CLUSTER_END, fd);
 }
 
-int fat_write(off_t base, int fd)
+int fat_write(off64_t base, int fd)
 {
 	cluster_t c = 0;
 

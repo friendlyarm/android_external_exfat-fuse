@@ -22,17 +22,17 @@
 #include <errno.h>
 #include "mkexfat.h"
 
-off_t rootdir_alignment(void)
+off64_t rootdir_alignment(void)
 {
 	return CLUSTER_SIZE(sb);
 }
 
-off_t rootdir_size(void)
+off64_t rootdir_size(void)
 {
 	return CLUSTER_SIZE(sb);
 }
 
-int rootdir_write(off_t base, int fd)
+int rootdir_write(off64_t base, int fd)
 {
 	if (write(fd, &label_entry, sizeof(struct exfat_entry)) == -1)
 		return 1;

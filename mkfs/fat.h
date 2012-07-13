@@ -21,8 +21,8 @@
 #ifndef MKFS_FAT_H_INCLUDED
 #define MKFS_FAT_H_INCLUDED
 
-off_t fat_alignment(void);
-off_t fat_size(void);
-int fat_write(off_t base, int fd);
+off64_t fat_alignment(void);
+off64_t fat_size(void);
+int fat_write(off64_t base, int fd);
 
 #endif /* ifndef MKFS_FAT_H_INCLUDED */

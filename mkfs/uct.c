@@ -23,12 +23,12 @@
 #include "mkexfat.h"
 #include "uctc.h"
 
-off_t uct_alignment(void)
+off64_t uct_alignment(void)
 {
 	return CLUSTER_SIZE(sb);
 }
 
-off_t uct_size(void)
+off64_t uct_size(void)
 {
 	return sizeof(upcase_table);
 }
@@ -43,7 +43,7 @@ static le32_t uct_checksum(void)
 	return cpu_to_le32(sum);
 }
 
-int uct_write(off_t base, int fd)
+int uct_write(off64_t base, int fd)
 {
 	if (write(fd, upcase_table, sizeof(upcase_table)) == -1)
 		return errno;

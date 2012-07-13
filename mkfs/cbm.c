@@ -26,17 +26,17 @@
 #include "uct.h"
 #include "rootdir.h"
 
-off_t cbm_alignment(void)
+off64_t cbm_alignment(void)
 {
 	return CLUSTER_SIZE(sb);
 }
 
-off_t cbm_size(void)
+off64_t cbm_size(void)
 {
 	return DIV_ROUND_UP(le32_to_cpu(sb.cluster_count), CHAR_BIT);
 }
 
-int cbm_write(off_t base, int fd)
+int cbm_write(off64_t base, int fd)
 {
 	uint32_t allocated_clusters =
 			DIV_ROUND_UP(cbm_size(), CLUSTER_SIZE(sb)) +

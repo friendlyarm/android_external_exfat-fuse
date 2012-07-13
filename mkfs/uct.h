@@ -21,8 +21,8 @@
 #ifndef MKFS_UCT_H_INCLUDED
 #define MKFS_UCT_H_INCLUDED
 
-off_t uct_alignment(void);
-off_t uct_size(void);
-int uct_write(off_t base, int fd);
+off64_t uct_alignment(void);
+off64_t uct_size(void);
+int uct_write(off64_t base, int fd);
 
 #endif /* ifndef MKFS_UCT_H_INCLUDED */

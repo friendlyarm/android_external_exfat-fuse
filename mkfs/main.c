@@ -44,12 +44,12 @@ struct exfat_structure
 {
 	const char* name;
 	int order;
-	off_t (*get_alignment)(void);
-	off_t (*get_size)(void);
-	int (*write_data)(off_t, int);
+	off64_t (*get_alignment)(void);
+	off64_t (*get_size)(void);
+	int (*write_data)(off64_t, int);
 };
 
-static int init_sb(off_t volume_size, int sector_bits, int spc_bits,
+static int init_sb(off64_t volume_size, int sector_bits, int spc_bits,
 		uint32_t volume_serial, int first_sector)
 {
 	uint32_t clusters_max = (volume_size >> sector_bits >> spc_bits);
@@ -101,9 +101,9 @@ static int init_sb(off_t volume_size, int sector_bits, int spc_bits,
 
 static int erase_device(int fd)
 {
-	off_t erase_size;
-	off_t erase_sectors;
-	off_t i;
+	off64_t erase_size;
+	off64_t erase_sectors;
+	off64_t i;
 	void* sector;
 
 	erase_size = ((uint64_t)
@@ -118,7 +118,7 @@ static int erase_device(int fd)
 
 	erase_sectors = erase_size / SECTOR_SIZE(sb);
 
-	if (lseek(fd, 0, SEEK_SET) == (off_t) -1)
+	if (lseek(fd, 0, SEEK_SET) == (off64_t) -1)
 	{
 		exfat_error("seek failed");
 		return 1;
@@ -178,13 +178,13 @@ static struct exfat_structure structures[] =
 };
 #undef FS_OBJECT
 
-static off_t write_structure(int fd, struct exfat_structure* structure,
-		off_t current)
+static off64_t write_structure(int fd, struct exfat_structure* structure,
+		off64_t current)
 {
-	off_t alignment = structure->get_alignment();
-	off_t base = ROUND_UP(current, alignment);
+	off64_t alignment = structure->get_alignment();
+	off64_t base = ROUND_UP(current, alignment);
 
-	if (lseek(fd, base, SEEK_SET) == (off_t) -1)
+	if (lseek(fd, base, SEEK_SET) == (off64_t) -1)
 	{
 		exfat_error("seek to %"PRIu64" failed", base);
 		return -1;
@@ -205,7 +205,7 @@ static off_t write_structure(int fd, struct exfat_structure* structure,
 
 static int write_structures(int fd)
 {
-	off_t current;
+	off64_t current;
 	size_t i;
 	int remainder;
 
@@ -216,7 +216,7 @@ static int write_structures(int fd)
 		for (i = 0; i < sizeof(structures) / sizeof(structures[0]); i++)
 		{
 			current = write_structure(fd, &structures[i], current);
-			if (current == (off_t) -1)
+			if (current == (off64_t) -1)
 				return 1;
 			remainder += structures[i].order;
 		}
@@ -225,7 +225,7 @@ static int write_structures(int fd)
 	return 0;
 }
 
-static int get_spc_bits(int user_defined, off_t volume_size)
+static int get_spc_bits(int user_defined, off64_t volume_size)
 {
 	if (user_defined != -1)
 		return user_defined;
@@ -274,7 +274,7 @@ static int mkfs(const char* spec, int sector_bits, int spc_bits,
 		const char* volume_label, uint32_t volume_serial, int first_sector)
 {
 	int fd;
-	off_t volume_size;
+	off64_t volume_size;
 	char spec_abs[PATH_MAX];
 
 	if (realpath(spec, spec_abs) == NULL)
@@ -288,7 +288,7 @@ static int mkfs(const char* spec, int sector_bits, int spc_bits,
 		return 1;
 
 	volume_size = lseek(fd, 0, SEEK_END);
-	if (volume_size == (off_t) -1)
+	if (volume_size == (off64_t) -1)
 	{
 		close(fd);
 		exfat_error("seek failed");

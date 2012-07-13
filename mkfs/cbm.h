@@ -21,8 +21,8 @@
 #ifndef MKFS_CBM_H_INCLUDED
 #define MKFS_CBM_H_INCLUDED
 
-off_t cbm_alignment(void);
-off_t cbm_size(void);
-int cbm_write(off_t base, int fd);
+off64_t cbm_alignment(void);
+off64_t cbm_size(void);
+int cbm_write(off64_t base, int fd);
 
 #endif /* ifndef MKFS_CBM_H_INCLUDED */

@@ -27,6 +27,11 @@
 #define __USE_UNIX98 /* for pread() in Linux */
 #include <unistd.h>
 
+#define  lseek   lseek64
+#define  pread  pread64
+#define  pwrite pwrite64
+#define  fcntl  __fcntl64
+
 #if _FILE_OFFSET_BITS != 64
 	#error You should define _FILE_OFFSET_BITS=64
 #endif
@@ -58,14 +63,14 @@ int exfat_open(const char* spec, int ro)
 	return fd;
 }
 
-void exfat_read_raw(void* buffer, size_t size, off_t offset, int fd)
+void exfat_read_raw(void* buffer, size_t size, off64_t offset, int fd)
 {
 	if (pread(fd, buffer, size, offset) != size)
 		exfat_bug("failed to read %zu bytes from file at %"PRIu64, size,
 				(uint64_t) offset);
 }
 
-void exfat_write_raw(const void* buffer, size_t size, off_t offset, int fd)
+void exfat_write_raw(const void* buffer, size_t size, off64_t offset, int fd)
 {
 	if (pwrite(fd, buffer, size, offset) != size)
 		exfat_bug("failed to write %zu bytes to file at %"PRIu64, size,
@@ -73,11 +78,11 @@ void exfat_write_raw(const void* buffer, size_t size, off_t offset, int fd)
 }
 
 ssize_t exfat_read(const struct exfat* ef, struct exfat_node* node,
-		void* buffer, size_t size, off_t offset)
+		void* buffer, size_t size, off64_t offset)
 {
 	cluster_t cluster;
 	char* bufp = buffer;
-	off_t lsize, loffset, remainder;
+	off64_t lsize, loffset, remainder;
 
 	if (offset >= node->size)
 		return 0;
@@ -113,11 +118,11 @@ ssize_t exfat_read(const struct exfat* ef, struct exfat_node* node,
 }
 
 ssize_t exfat_write(struct exfat* ef, struct exfat_node* node,
-		const void* buffer, size_t size, off_t offset)
+		const void* buffer, size_t size, off64_t offset)
 {
 	cluster_t cluster;
 	const char* bufp = buffer;
-	off_t lsize, loffset, remainder;
+	off64_t lsize, loffset, remainder;
 
 	if (offset + size > node->size)
 	{

@@ -21,8 +21,8 @@
 #ifndef MKFS_ROOTDIR_H_INCLUDED
 #define MKFS_ROOTDIR_H_INCLUDED
 
-off_t rootdir_alignment(void);
-off_t rootdir_size(void);
-int rootdir_write(off_t base, int fd);
+off64_t rootdir_alignment(void);
+off64_t rootdir_size(void);
+int rootdir_write(off64_t base, int fd);
 
 #endif /* ifndef MKFS_ROOTDIR_H_INCLUDED */

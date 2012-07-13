@@ -23,17 +23,17 @@
 #include <errno.h>
 #include "mkexfat.h"
 
-off_t vbr_alignment(void)
+off64_t vbr_alignment(void)
 {
 	return 1;
 }
 
-off_t vbr_size(void)
+off64_t vbr_size(void)
 {
 	return 12 * SECTOR_SIZE(sb);
 }
 
-int vbr_write(off_t base, int fd)
+int vbr_write(off64_t base, int fd)
 {
 	uint32_t checksum;
 	le32_t* sector = malloc(SECTOR_SIZE(sb));

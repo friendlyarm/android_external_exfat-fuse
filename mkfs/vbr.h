@@ -21,8 +21,8 @@
 #ifndef MKFS_VBR_H_INCLUDED
 #define MKFS_VBR_H_INCLUDED
 
-off_t vbr_alignment(void);
-off_t vbr_size(void);
-int vbr_write(off_t base, int fd);
+off64_t vbr_alignment(void);
+off64_t vbr_size(void);
+int vbr_write(off64_t base, int fd);
 
 #endif /* ifndef MKFS_VBR_H_INCLUDED */

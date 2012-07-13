@@ -61,7 +61,7 @@ struct exfat_node
 	uint32_t fptr_index;
 	cluster_t fptr_cluster;
 	cluster_t entry_cluster;
-	off_t entry_offset;
+	off64_t entry_offset;
 	cluster_t start_cluster;
 	int flags;
 	uint64_t size;
@@ -126,12 +126,12 @@ void exfat_debug(const char* format, ...)
 #define exfat_error(x...)    exfat_errors++
 
 int exfat_open(const char* spec, int ro);
-void exfat_read_raw(void* buffer, size_t size, off_t offset, int fd);
-void exfat_write_raw(const void* buffer, size_t size, off_t offset, int fd);
+void exfat_read_raw(void* buffer, size_t size, off64_t offset, int fd);
+void exfat_write_raw(const void* buffer, size_t size, off64_t offset, int fd);
 ssize_t exfat_read(const struct exfat* ef, struct exfat_node* node,
-		void* buffer, size_t size, off_t offset);
+		void* buffer, size_t size, off64_t offset);
 ssize_t exfat_write(struct exfat* ef, struct exfat_node* node,
-		const void* buffer, size_t size, off_t offset);
+		const void* buffer, size_t size, off64_t offset);
 
 int exfat_opendir(struct exfat* ef, struct exfat_node* dir,
 		struct exfat_iterator* it);
@@ -142,7 +142,7 @@ int exfat_lookup(struct exfat* ef, struct exfat_node** node,
 int exfat_split(struct exfat* ef, struct exfat_node** parent,
 		struct exfat_node** node, le16_t* name, const char* path);
 
-off_t exfat_c2o(const struct exfat* ef, cluster_t cluster);
+off64_t exfat_c2o(const struct exfat* ef, cluster_t cluster);
 cluster_t exfat_next_cluster(const struct exfat* ef,
 		const struct exfat_node* node, cluster_t cluster);
 cluster_t exfat_advance_cluster(const struct exfat* ef,
@@ -150,7 +150,7 @@ cluster_t exfat_advance_cluster(const struct exfat* ef,
 void exfat_flush_cmap(struct exfat* ef);
 int exfat_truncate(struct exfat* ef, struct exfat_node* node, uint64_t size);
 uint32_t exfat_count_free_clusters(const struct exfat* ef);
-int exfat_find_used_sectors(const struct exfat* ef, off_t* a, off_t* b);
+int exfat_find_used_sectors(const struct exfat* ef, off64_t* a, off64_t* b);
 
 void exfat_stat(const struct exfat* ef, const struct exfat_node* node,
 		struct stat* stbuf);

@@ -92,7 +92,7 @@ static void parse_options(struct exfat* ef, const char* options)
 	ef->noatime = match_option(options, "noatime");
 }
 
-static int verify_vbr_checksum(void* sector, off_t sector_size, int fd)
+static int verify_vbr_checksum(void* sector, off64_t sector_size, int fd)
 {
 	uint32_t vbr_checksum;
 	int i;
